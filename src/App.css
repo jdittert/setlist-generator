@@ -2,7 +2,7 @@
 
 body {
   margin: 0;
-  padding: 20px; /* Add padding around the body of the page */
+  padding: 20px;
   font-family: Arial, sans-serif;
 }
 
@@ -62,10 +62,21 @@ h1 {
 }
 
 .song-form input {
-  display: block; /* Make form inputs display vertically */
+  display: block;
   padding: 5px;
   margin-bottom: 10px;
-  width: 100%; /* Set the width to 100% to fill the container */
+  width: 100%;
+}
+
+/* Add styles to display minutes and seconds inputs on the same line */
+.time-inputs {
+  display: flex;
+  align-items: center;
+}
+
+.time-inputs input {
+  width: 45px; /* Set the width for both minutes and seconds inputs */
+  margin-right: 5px; /* Add a small space between the two inputs */
 }
 
 .right-section-content {
