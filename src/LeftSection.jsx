@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const LeftSection = ({ onAddSong }) => {
   const [activeTab, setActiveTab] = useState("newSong");
@@ -9,6 +9,8 @@ const LeftSection = ({ onAddSong }) => {
     seconds: "",
     bpm: "",
   });
+
+  const titleInputRef = useRef(null);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -62,6 +64,10 @@ const LeftSection = ({ onAddSong }) => {
       seconds: "",
       bpm: "",
     });
+
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
   };
 
   return (
@@ -100,6 +106,7 @@ const LeftSection = ({ onAddSong }) => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
+                    ref={titleInputRef}
                     required
                   />
                 </div>
