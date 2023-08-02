@@ -1,0 +1,79 @@
+/* App.css */
+
+body {
+  margin: 0;
+  padding: 20px; /* Add padding around the body of the page */
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  /* Remove the padding from the .App class */
+}
+
+h1 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+}
+
+.left-section {
+  width: 50%;
+  padding-right: 20px;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.right-section {
+  width: 50%;
+  padding-left: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 5px 5px 0 0;
+  background-color: #f9f9f9;
+}
+
+.tab-buttons button.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.song-form {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.song-form label {
+  margin-bottom: 5px;
+}
+
+.song-form input {
+  display: block; /* Make form inputs display vertically */
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 100%; /* Set the width to 100% to fill the container */
+}
+
+.right-section-content {
+  margin-top: 20px;
+}
+
+.right-section-content div {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-left: 20px;
+}
