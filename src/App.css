@@ -22,13 +22,13 @@ h1 {
 .left-section {
   width: 50%;
   padding-right: 20px;
-  border: 1px solid #ccc;
   padding: 20px;
 }
 
 .right-section {
   width: 50%;
   padding-left: 20px;
+  padding: 20px;
 }
 
 .tab-buttons {
@@ -87,4 +87,14 @@ h1 {
   border: 1px solid #ccc;
   padding: 20px;
   margin-left: 20px;
+}
+
+.master-list table th:last-child,
+.master-list table td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.small-input {
+  max-width: 60px; /* Adjust the width as needed */
 }
