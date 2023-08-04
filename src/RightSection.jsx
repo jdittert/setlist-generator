@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import OptionsList from './OptionsList';
 
-const RightSection = ({ songs, onDeleteSong }) => {
+const RightSection = ({ songs, onDeleteSong, onClearList }) => {
   const [activeRightTab, setActiveRightTab] = useState("Master List");
   const [generatedOptions, setGeneratedOptions] = useState([]);
 
@@ -10,7 +10,7 @@ const RightSection = ({ songs, onDeleteSong }) => {
   };
 
   const handleGenerateOptions = () => {
-    const randomCombinations = [];
+    const randomCombinations = [];  
 
     // Generate three random combinations of three songs each
     for (let i = 0; i < 3; i++) {
@@ -26,6 +26,11 @@ const RightSection = ({ songs, onDeleteSong }) => {
 
     setGeneratedOptions(randomCombinations);
     setActiveRightTab("Option 1"); // Display the first generated option
+  };
+
+  const handleClearList = () => {
+    onClearList();
+    setGeneratedOptions([]);
   };
 
   return (
@@ -91,6 +96,13 @@ const RightSection = ({ songs, onDeleteSong }) => {
               )}
             </div>
           )}
+          {songs.length > 0 && (
+            <div className="mt-3">
+              <button className="btn btn-danger" onClick={handleClearList}>
+                Clear List
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -105,9 +117,10 @@ const MasterList = ({ songs, onDeleteSong, onGenerateOptions }) => {
     <div className="master-list">
       <div className="d-flex justify-content-between">
         <h2>Master List</h2>
+        {songs.length > 0 && 
         <button className="btn btn-primary" onClick={onGenerateOptions}>
               Generate
-                        </button>
+        </button>}
       </div>
       {sortedSongs.length === 0 ? (
         <p>Enter songs on the left.</p>

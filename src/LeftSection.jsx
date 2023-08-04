@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
+import ImportFromSpotify from './ImportFromSpotify';
 
-const LeftSection = ({ onAddSong }) => {
+const LeftSection = ({ onAddSong, onImportPlaylist }) => {
   const [activeTab, setActiveTab] = useState("newSong");
   const [formData, setFormData] = useState({
     title: "",
@@ -170,7 +171,7 @@ const LeftSection = ({ onAddSong }) => {
               </form>
             </div>
           ) : (
-            <div>Import Coming Soon</div>
+            <ImportFromSpotify onImportPlaylist={onImportPlaylist} />
           )}
         </div>
       </div>

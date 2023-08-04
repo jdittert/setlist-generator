@@ -26,12 +26,21 @@ const HomePage = () => {
     setSongList((prevSongList) => prevSongList.filter((song) => song.title !== title));
   };
 
+  const handleClearList = () => {
+    setSongList([]);
+  };
+
+  const handleImportPlaylist = (importedSongs) => {
+    // Update the songList state with the imported songs
+    setSongList((prevSongList) => [...prevSongList, ...importedSongs]);
+  };
+
   return (
     <div>
       <h1>Set List Generator</h1>
       <div style={{ display: "flex" }}>
-        <LeftSection onAddSong={handleAddSong}  />
-        <RightSection songs={songList} onDeleteSong={handleDeleteSong} />
+        <LeftSection onAddSong={handleAddSong} onImportPlaylist={handleImportPlaylist} />
+        <RightSection songs={songList} onDeleteSong={handleDeleteSong} onClearList={handleClearList} />
       </div>
     </div>
   );
