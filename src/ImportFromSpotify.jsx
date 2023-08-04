@@ -126,13 +126,14 @@ const ImportFromSpotify = ({ onImportPlaylist }) => {
           type="text"
           id="spotifyPlaylistUrl"
           name="spotifyPlaylistUrl"
+          placeholder="Enter link to Spotify playlist..."
           value={spotifyPlaylistUrl}
           onChange={handleImportChange}
           className={`form-control ${importError ? "is-invalid" : ""}`}
         />
         {importError && <div className="invalid-feedback">{importError}</div>}
       </div>
-      <button type="submit" className="btn btn-primary" disabled={isImporting}>
+      <button type="submit" className="btn btn-primary mt-2" disabled={isImporting}>
         {isImporting ? "Importing..." : "Import"}
       </button>
     </form>
