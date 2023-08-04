@@ -5,6 +5,10 @@ const ImportFromSpotify = ({ onImportPlaylist }) => {
   const [importError, setImportError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
 
+  // Insert your Spotify API client ID and client secret
+  const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+  const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+
   const handleImportChange = (event) => {
     setSpotifyPlaylistUrl(event.target.value);
     setImportError(""); // Clear previous error
@@ -75,9 +79,8 @@ const ImportFromSpotify = ({ onImportPlaylist }) => {
 
   const fetchPlaylist = async (playlistId) => {
     try {
-      // Insert your Spotify API client ID and client secret
-      const clientId = "40ce1fda6d6d47f7ac807a98b251d230";
-      const clientSecret = "a004446777224bf387517684d506d0f4";
+      
+
   
       // Encode client ID and client secret as base64
       const credentials = btoa(`${clientId}:${clientSecret}`);
