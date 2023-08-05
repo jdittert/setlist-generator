@@ -9,10 +9,6 @@ const RightSection = ({ songs, onDeleteSong, onClearList, setLength, onSetLength
     setActiveRightTab(tab);
   };
 
-  const handleClearList = () => {
-    onClearList();
-  };
-
   return (
     <div className="right-section">
       <div className="card">
@@ -44,20 +40,14 @@ const RightSection = ({ songs, onDeleteSong, onClearList, setLength, onSetLength
           {activeRightTab === "Master List" ? (
             <div>              
               <MasterList songs={songs} onDeleteSong={onDeleteSong} onSetLength={onSetLength}
-              onCreateSet={onCreateSet} />
+              onCreateSet={onCreateSet} onClearList={onClearList} />
             </div>
           ) : (
             <div>
               <GenerateSetList songs={songs} />
             </div>
           )}
-          {songs.length > 0 && (
-            <div className="mt-3">
-              <button className="btn btn-danger" onClick={handleClearList}>
-                Clear List
-              </button>
-            </div>
-          )}
+          
         </div>
       </div>
     </div>

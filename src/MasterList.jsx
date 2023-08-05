@@ -1,35 +1,13 @@
-import { useRef } from 'react';
 
-const MasterList = ({ songs, onDeleteSong, setLength, onSetLength, onCreateSet }) => {
+const MasterList = ({ songs, onDeleteSong, setLength, onSetLength, onClearList }) => {
     // Sort the songs in alphabetical order by their titles
     const sortedSongs = songs.sort((a, b) => a.title.localeCompare(b.title));
-    const setLengthRef = useRef();
-  
-    const handleCreateSet = (event) => {
-      event.preventDefault();
-      // Add your logic to create a set based on the selected songs
-      console.log(setLengthRef.current.value);
-      onCreateSet();
-    };
   
     return (
       <div className="master-list">
         <div className="d-flex justify-content-between">
           <h2>Master List</h2>
         </div>
-        {/* Create Set input and button */}
-        <div className="mt-3 d-flex justify-content-between">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Minutes"
-                value={setLength}
-                ref={setLengthRef}
-              />
-              <button className="btn btn-success" onClick={handleCreateSet}>
-                Create Set
-              </button>
-            </div>
         {sortedSongs.length === 0 ? (
           <p>Enter songs on the left.</p>
         ) : (
@@ -57,6 +35,13 @@ const MasterList = ({ songs, onDeleteSong, setLength, onSetLength, onCreateSet }
             </tbody>
           </table>
         )}
+        {songs.length > 0 && (
+            <div className="mt-3">
+              <button className="btn btn-danger" onClick={onClearList}>
+                Clear List
+              </button>
+            </div>
+          )}
       </div>
     );
   };
