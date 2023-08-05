@@ -6,6 +6,7 @@ const GenerateSetList = ({ songs }) => {
   const [numMinutes, setNumMinutes] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [generatedSet, setGeneratedSet] = useState([]);
+  const [previousGeneratedSet, setPreviousGeneratedSet] = useState([]);
 
   const handleGenerate = (e) => {
     e.preventDefault();
@@ -13,6 +14,8 @@ const GenerateSetList = ({ songs }) => {
     if ((numSongs && numMinutes) || (!numSongs && !numMinutes)) {
       setAlertMessage("Please choose either the number of songs or the number of minutes.");
     } else if (numSongs) {
+        // Clear the previousGeneratedSet when generating a new set
+        setPreviousGeneratedSet([]);
         const num = parseInt(numSongs, 10);
         if (num > songs.length) {
           setGeneratedSet(songs.sort(() => Math.random() - 0.5));
@@ -21,7 +24,15 @@ const GenerateSetList = ({ songs }) => {
           setGeneratedSet(getRandomSongs(num));
         }
     } else if (numMinutes) {
-      console.log(`${numMinutes} minutes`);
+        // Clear the previousGeneratedSet when generating a new set
+        setPreviousGeneratedSet([]);
+        const totalSeconds = parseInt(numMinutes, 10) * 60;
+        if (totalSeconds > getTotalTime()) {
+          setGeneratedSet(songs.sort(() => Math.random() - 0.5));
+          setAlertMessage(`Value exceeds total time. Showing entire list in random order.`);
+        } else {
+          setGeneratedSet(getRandomSongsWithinTime(totalSeconds));
+        }
     }
   };
 
@@ -30,11 +41,44 @@ const GenerateSetList = ({ songs }) => {
     return shuffledSongs.slice(0, count);
   };
 
+  const getTotalTime = () => {
+    return songs.reduce((total, song) => total + (song.totalSeconds || 300), 0);
+  };
+
+  const getRandomSongsWithinTime = (targetTime) => {
+    const shuffledSongs = songs.sort(() => Math.random() - 0.5);
+    const selectedSongs = [];
+    let currentTime = 0;
+    for (const song of shuffledSongs) {
+      if (song.timeInSeconds && currentTime + song.timeInSeconds <= targetTime) {
+        selectedSongs.push(song);
+        currentTime += song.timeInSeconds;
+      }
+    }
+    return selectedSongs;
+  };
+
   const handleReGenerate = () => {
     setAlertMessage("");
+    let newGeneratedSet;
+
     if (numSongs) {
-      setGeneratedSet(getRandomSongs(parseInt(numSongs, 10)));
+      newGeneratedSet = getRandomSongs(parseInt(numSongs, 10));
+    } else if (numMinutes) {
+      const totalSeconds = parseInt(numMinutes, 10) * 60;
+      newGeneratedSet = getRandomSongsWithinTime(totalSeconds);
     }
+
+    if (
+      newGeneratedSet.length === previousGeneratedSet.length &&
+      newGeneratedSet.every((song, index) => song.title === previousGeneratedSet[index].title)
+    ) {
+      setAlertMessage("Cannot regenerate the same set list twice in a row.");
+      return;
+    }
+
+    setGeneratedSet(newGeneratedSet);
+    setPreviousGeneratedSet(generatedSet);
   };
 
   const handleReset = () => {
@@ -86,7 +130,7 @@ const GenerateSetList = ({ songs }) => {
       </form>  
       </>    
       ) : (
-        <SetList songs={generatedSet} numSongs={numSongs} onReGenerate={handleReGenerate} onReset={handleReset} />
+        <SetList songs={generatedSet} numSongs={numSongs} numMinutes={numMinutes} onReGenerate={handleReGenerate} onReset={handleReset} />
       )}
       
     </div>
