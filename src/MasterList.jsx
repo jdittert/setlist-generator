@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-const MasterList = ({ songs, onDeleteSong, onGenerateOptions, setLength, onSetLength, onCreateSet }) => {
+const MasterList = ({ songs, onDeleteSong, setLength, onSetLength, onCreateSet }) => {
     // Sort the songs in alphabetical order by their titles
     const sortedSongs = songs.sort((a, b) => a.title.localeCompare(b.title));
     const setLengthRef = useRef();
@@ -16,10 +16,6 @@ const MasterList = ({ songs, onDeleteSong, onGenerateOptions, setLength, onSetLe
       <div className="master-list">
         <div className="d-flex justify-content-between">
           <h2>Master List</h2>
-          {songs.length > 0 && 
-          <button className="btn btn-primary" onClick={onGenerateOptions}>
-                Generate
-          </button>}
         </div>
         {/* Create Set input and button */}
         <div className="mt-3 d-flex justify-content-between">
