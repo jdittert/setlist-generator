@@ -4,6 +4,7 @@ import RightSection from "./RightSection";
 
 const HomePage = () => {
   const [songList, setSongList] = useState(localStorage.getItem("songList") != null ? JSON.parse(localStorage.getItem("songList")) : [] );
+  const [setLength, setSetLength] = useState("");
 
   useEffect(() => {
     // Load songList from localStorage
@@ -35,12 +36,24 @@ const HomePage = () => {
     setSongList((prevSongList) => [...prevSongList, ...importedSongs]);
   };
 
+  // Function to update setLength
+  const handleSetLength = (newLength) => {
+    setSetLength(newLength);
+    console.log(setLength)
+  };
+
+  const handleCreateSet = () => {
+    // Add your logic to create a set based on the selected songs and setLength
+    console.log("Creating set...");
+  };
+
   return (
     <div>
       <h1>Set List Generator</h1>
       <div style={{ display: "flex" }}>
         <LeftSection onAddSong={handleAddSong} onImportPlaylist={handleImportPlaylist} />
-        <RightSection songs={songList} onDeleteSong={handleDeleteSong} onClearList={handleClearList} />
+        <RightSection songs={songList} onDeleteSong={handleDeleteSong} onClearList={handleClearList} setLength={setLength}
+        onSetLength={handleSetLength} onCreateSet={handleCreateSet} />
       </div>
     </div>
   );
