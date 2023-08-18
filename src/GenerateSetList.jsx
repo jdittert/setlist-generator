@@ -8,32 +8,48 @@ const GenerateSetList = ({ songs }) => {
   const [generatedSet, setGeneratedSet] = useState([]);
   const [previousGeneratedSet, setPreviousGeneratedSet] = useState([]);
 
-  const handleGenerate = (e) => {
-    e.preventDefault();
+  const handleGenerate = (numSongs, numMinutes, retryCount = 0) => {
+    let newGeneratedSet;
+    console.log("testing")
+    console.log(generatedSet)
 
+    // Check if the user has added either numSongs or numMinutes, but not both
     if ((numSongs && numMinutes) || (!numSongs && !numMinutes)) {
-      setAlertMessage("Please choose either the number of songs or the number of minutes.");
-    } else if (numSongs) {
-        // Clear the previousGeneratedSet when generating a new set
-        setPreviousGeneratedSet([]);
-        const num = parseInt(numSongs, 10);
-        if (num > songs.length) {
-          setGeneratedSet(songs.sort(() => Math.random() - 0.5));
-          setAlertMessage(`Value exceeds total number of songs. Showing entire list in random order.`);
-        } else {
-          setGeneratedSet(getRandomSongs(num));
-        }
-    } else if (numMinutes) {
-        // Clear the previousGeneratedSet when generating a new set
-        setPreviousGeneratedSet([]);
-        const totalSeconds = parseInt(numMinutes, 10) * 60;
-        if (totalSeconds > getTotalTime()) {
-          setGeneratedSet(songs.sort(() => Math.random() - 0.5));
-          setAlertMessage(`Value exceeds total time. Showing entire list in random order.`);
-        } else {
-          setGeneratedSet(getRandomSongsWithinTime(totalSeconds));
-        }
+      setAlertMessage("Please choose either Number of Songs or Number of Minutes.");
+      setGeneratedSet([]); // Clear any previously generated set
+      return [];
     }
+
+    if (numSongs) {
+      newGeneratedSet = getRandomSongs(numSongs);
+    } else if (numMinutes) {
+      const totalSeconds = numMinutes * 60;
+      newGeneratedSet = getRandomSongsWithinTime(totalSeconds);
+    }
+
+    console.log(newGeneratedSet)
+
+    if (
+      newGeneratedSet.length === previousGeneratedSet.length &&
+      newGeneratedSet.every((song, index) => song.title === previousGeneratedSet[index].title)
+    ) {
+      if (retryCount < 3) {
+        // Retry generating a new list using the same criteria
+        return handleGenerate(numSongs, numMinutes, retryCount + 1);
+      } else {
+        // Inform the user that this is the only possible list
+        setAlertMessage("This is the only possible set list.");
+        return newGeneratedSet;
+      }
+    }
+
+    setAlertMessage("");
+    setGeneratedSet(newGeneratedSet); // Set the newly generated set
+    return newGeneratedSet;
+  };
+
+  const handleReGenerate = () => {
+    setGeneratedSet(handleGenerate(numSongs, numMinutes));
   };
 
   const getRandomSongs = (count) => {
@@ -58,29 +74,6 @@ const GenerateSetList = ({ songs }) => {
     return selectedSongs;
   };
 
-  const handleReGenerate = () => {
-    setAlertMessage("");
-    let newGeneratedSet;
-
-    if (numSongs) {
-      newGeneratedSet = getRandomSongs(parseInt(numSongs, 10));
-    } else if (numMinutes) {
-      const totalSeconds = parseInt(numMinutes, 10) * 60;
-      newGeneratedSet = getRandomSongsWithinTime(totalSeconds);
-    }
-
-    if (
-      newGeneratedSet.length === previousGeneratedSet.length &&
-      newGeneratedSet.every((song, index) => song.title === previousGeneratedSet[index].title)
-    ) {
-      setAlertMessage("Cannot regenerate the same set list twice in a row.");
-      return;
-    }
-
-    setGeneratedSet(newGeneratedSet);
-    setPreviousGeneratedSet(generatedSet);
-  };
-
   const handleReset = () => {
     setNumSongs("");
     setNumMinutes("");
@@ -94,7 +87,7 @@ const GenerateSetList = ({ songs }) => {
       {generatedSet.length === 0 ? (
        <>
        <h2>Generate Set List</h2>
-      <form onSubmit={handleGenerate}>
+      <form onSubmit={(e) => { e.preventDefault(); handleGenerate(numSongs, numMinutes); }}>
         <div className="form-group">
           <label htmlFor="numSongs">Number of Songs:</label>
           <input
