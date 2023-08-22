@@ -10,8 +10,6 @@ const GenerateSetList = ({ songs }) => {
 
   const handleGenerate = (numSongs, numMinutes, retryCount = 0) => {
     let newGeneratedSet;
-    console.log("testing")
-    console.log(generatedSet)
 
     // Check if the user has added either numSongs or numMinutes, but not both
     if ((numSongs && numMinutes) || (!numSongs && !numMinutes)) {
@@ -20,14 +18,18 @@ const GenerateSetList = ({ songs }) => {
       return [];
     }
 
-    if (numSongs) {
+    if (numSongs && Number(numSongs) > songs.length) {
+      setAlertMessage("Number of Songs cannot exceed the total number of songs.");
+      newGeneratedSet = shuffleArray(songs); // Return full list in random order
+    } else if (numMinutes && Number(numMinutes) > getTotalTime() / 60) {
+      setAlertMessage("Number of Minutes cannot exceed the total length of songs.");
+      newGeneratedSet = shuffleArray(songs); // Return full list in random order
+    } else if (numSongs) {
       newGeneratedSet = getRandomSongs(numSongs);
     } else if (numMinutes) {
       const totalSeconds = numMinutes * 60;
       newGeneratedSet = getRandomSongsWithinTime(totalSeconds);
     }
-
-    console.log(newGeneratedSet)
 
     if (
       newGeneratedSet.length === previousGeneratedSet.length &&
@@ -43,8 +45,9 @@ const GenerateSetList = ({ songs }) => {
       }
     }
 
-    setAlertMessage("");
+    
     setGeneratedSet(newGeneratedSet); // Set the newly generated set
+    setPreviousGeneratedSet(newGeneratedSet); // Update previousGeneratedSet
     return newGeneratedSet;
   };
 
@@ -60,6 +63,15 @@ const GenerateSetList = ({ songs }) => {
   const getTotalTime = () => {
     return songs.reduce((total, song) => total + (song.totalSeconds || 300), 0);
   };
+
+  function shuffleArray(array) {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  }
 
   const getRandomSongsWithinTime = (targetTime) => {
     const shuffledSongs = songs.sort(() => Math.random() - 0.5);
@@ -82,7 +94,11 @@ const GenerateSetList = ({ songs }) => {
   };
 
   return (
-    <div className="generate-set-list">      
+    <div className="generate-set-list">
+      {songs.length === 0 ? (
+        <p className="alert alert-info mt-2">Add songs or import a playlist to generate a set list.</p>
+      ) : (
+        <>   
       {alertMessage && <div className="alert alert-danger mt-2">{alertMessage}</div>}
       {generatedSet.length === 0 ? (
        <>
@@ -124,6 +140,8 @@ const GenerateSetList = ({ songs }) => {
       </>    
       ) : (
         <SetList songs={generatedSet} numSongs={numSongs} numMinutes={numMinutes} onReGenerate={handleReGenerate} onReset={handleReset} />
+      )}
+      </>
       )}
       
     </div>

@@ -9,15 +9,32 @@ const SetList = ({ songs, numSongs, numMinutes, onReGenerate, onReset }) => {
         const seconds = totalSeconds % 60;
         return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
       };
-    
+
       const calculateTotalTime = () => {
-        const totalSeconds = songs.reduce((total, song) => total + (song.timeInSeconds || 300), 0);
-        return formatTime(totalSeconds);
+        return songs.reduce((total, song) => total + (song.timeInSeconds || 300), 0);        
       };
+
+      const displayHeading = () => {
+        let heading = "Set List";
+      
+        if (numSongs && numSongs <= songs.length) {
+          heading = `${heading} (${numSongs} Songs)`;
+        } else if (numMinutes && Number(numMinutes) * 60 <= calculateTotalTime()) {
+          heading = `${heading} (${numMinutes} Minutes)`;
+        } else if (numSongs) {
+          heading = `${heading} (${songs.length} Songs)`;
+        } else if (numMinutes) {
+          heading = `${heading} (${numMinutes} Minutes)`;
+        }
+      
+        return heading;
+      };
+    
+      
 
     return (
       <div className="set-list">
-        <h2>Set List ({numMinutes ? `${numMinutes} Minutes` : `${numSongs} Songs`})</h2>
+        <h2>{displayHeading()}</h2>
         <table className="table table-striped">
         <thead>
           <tr>
@@ -34,7 +51,7 @@ const SetList = ({ songs, numSongs, numMinutes, onReGenerate, onReset }) => {
           ))}
           <tr>
             <td className="fw-bold">Total Time</td>
-            <td className="fw-bold text-end">{calculateTotalTime()}</td>
+            <td className="fw-bold text-end">{formatTime(calculateTotalTime())}</td>
           </tr>
         </tbody>
       </table>
