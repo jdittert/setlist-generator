@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SetList from './SetList';
 
 const GenerateSetList = ({ songs }) => {
@@ -7,6 +7,28 @@ const GenerateSetList = ({ songs }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [generatedSet, setGeneratedSet] = useState([]);
   const [previousGeneratedSet, setPreviousGeneratedSet] = useState([]);
+  const [storedGeneratedSet, setStoredGeneratedSet] = useState(null);
+
+  useEffect(() => {
+    // Load stored generated set list from local storage
+    const storedSetList = localStorage.getItem("storedGeneratedSet");
+    if (storedSetList) {
+      setStoredGeneratedSet(JSON.parse(storedSetList));
+      setGeneratedSet(JSON.parse(storedSetList)); // Populate generatedSet from storedGeneratedSet
+    }
+  }, []);
+
+  // Load the last user inputs from local storage
+  useEffect(() => {
+    const storedNumSongs = localStorage.getItem("storedNumSongs");
+    const storedNumMinutes = localStorage.getItem("storedNumMinutes");
+    if (storedNumSongs) {
+      setNumSongs(storedNumSongs);
+    }
+    if (storedNumMinutes) {
+      setNumMinutes(storedNumMinutes);
+    }
+  }, []);
 
   const handleGenerate = (numSongs, numMinutes, retryCount = 0) => {
     let newGeneratedSet;
@@ -45,7 +67,9 @@ const GenerateSetList = ({ songs }) => {
       }
     }
 
-    
+    localStorage.setItem("storedGeneratedSet", JSON.stringify(newGeneratedSet));
+    localStorage.setItem("storedNumSongs", numSongs);
+    localStorage.setItem("storedNumMinutes", numMinutes);  
     setGeneratedSet(newGeneratedSet); // Set the newly generated set
     setPreviousGeneratedSet(newGeneratedSet); // Update previousGeneratedSet
     return newGeneratedSet;
@@ -91,6 +115,10 @@ const GenerateSetList = ({ songs }) => {
     setNumMinutes("");
     setAlertMessage("");
     setGeneratedSet([]);
+    setStoredGeneratedSet(null); // Clear stored generated set list
+    localStorage.removeItem("storedGeneratedSet"); // Clear stored generated set list in local storage
+    localStorage.removeItem("storedNumSongs"); // Clear stored numSongs in local storage
+    localStorage.removeItem("storedNumMinutes"); // Clear stored numMinutes in local storage
   };
 
   return (
