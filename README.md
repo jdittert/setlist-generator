@@ -1,8 +1,10 @@
-# React + Vite
+# Set List Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+[Set List Generator](https://jdittert.github.io/setlist-generator/) allows users to create a master list of songs and then generate set lists of a user-specified length (number of minutes or number of songs) based on the master list. Users can import songs individually or import a Spotify playlist.
 
-Currently, two official plugins are available:
+The project was bootstrapped with [Vite](https://vitejs.dev/).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Much of the code was written by [Chat GPT 3.5](https://chat.openai.com/). I assembled and edited the code to create the finished product. I used Chat GPT for this project to get used to its interface and its product. 
+
+
